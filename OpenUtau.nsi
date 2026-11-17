@@ -59,7 +59,7 @@ FunctionEnd
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "bin\win-${ARCH}\*"
+  File /r "bin\win-${ARCH}\*"
 SectionEnd
 
 Section -AdditionalIcons
@@ -85,6 +85,16 @@ Section -Post
   WriteRegStr HKCR "OpenUtauFile" "" "OpenUtau Sequence File"
   WriteRegStr HKCR "OpenUtauFile\DefaultIcon" "" "$INSTDIR\OpenUtau.exe"
   WriteRegStr HKCR "OpenUtauFile\shell\open\command" "" '"$INSTDIR\OpenUtau.exe" "%1"'
+SectionEnd
+
+; Bundled dependencies. Installed OpenUtau reads them from Documents\OpenUtau\Dependencies.
+; Staged from the .oudep packages into bin\deps\<name> before running makensis.
+Section "Dependencies"
+  SetOverwrite ifnewer
+  SetOutPath "$DOCUMENTS\OpenUtau\Dependencies\nsf_hifigan"
+  File /r "bin\deps\nsf_hifigan\*"
+  SetOutPath "$DOCUMENTS\OpenUtau\Dependencies\some"
+  File /r "bin\deps\some\*"
 SectionEnd
 
 Section "VC Redist"
